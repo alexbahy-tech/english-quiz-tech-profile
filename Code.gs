@@ -1,16 +1,19 @@
 /**
  * ============================================================
- * GOOGLE APPS SCRIPT - EXAM RESULTS RECEIVER
+ * GOOGLE APPS SCRIPT - EXAM RESULTS RECEIVER (ENHANCED)
  * SMK Negeri 1 Maluku Tengah - English Test System
+ * Version 2.0 - Dengan Fitur Kelas
  * ============================================================
  * 
  * CARA SETUP:
- * 1. Copy semua kode ini ke Apps Script Editor
- * 2. Save (Ctrl+S)
- * 3. Deploy > New Deployment > Web App
- * 4. Execute as: Me
- * 5. Who has access: Anyone
- * 6. Copy URL deployment ke file HTML
+ * 1. Buka Google Sheets baru
+ * 2. Extensions > Apps Script
+ * 3. Copy semua kode ini ke Apps Script Editor
+ * 4. Save (Ctrl+S)
+ * 5. Deploy > New Deployment > Web App
+ * 6. Execute as: Me
+ * 7. Who has access: Anyone
+ * 8. Copy URL deployment ke file HTML (CONFIG.GOOGLE_SCRIPT_URL)
  * 
  * ============================================================
  */
@@ -21,8 +24,9 @@
 const CONFIG = {
   SHEET_NAME: 'Hasil Ujian',              // Nama sheet untuk data ujian
   STATS_SHEET_NAME: 'Statistik',          // Nama sheet untuk statistik
+  CLASS_STATS_SHEET_NAME: 'Statistik Per Kelas', // Nama sheet untuk statistik per kelas
   SEND_EMAIL_NOTIFICATION: false,          // Set true untuk aktifkan email
-  ADMIN_EMAIL: 'alexbahy@500gb.cloud',       // Email admin (ganti dengan email Anda)
+  ADMIN_EMAIL: 'alexbahy@500gb.cloud',    // Email admin (ganti dengan email Anda)
   TIMEZONE: 'Asia/Jakarta',               // Timezone Indonesia
   DATE_FORMAT: 'dd/MM/yyyy HH:mm:ss'      // Format tanggal Indonesia
 };
@@ -32,36 +36,26 @@ const CONFIG = {
 // ============================================================
 function doPost(e) {
   try {
-    // Log untuk debugging
     Logger.log('📨 Request diterima');
     
-    // Validasi request
     if (!e || !e.postData || !e.postData.contents) {
       throw new Error('Request tidak valid - tidak ada data');
     }
     
-    // Parse data JSON
     const data = JSON.parse(e.postData.contents);
     Logger.log('📦 Data parsed: ' + JSON.stringify(data));
     
-    // Validasi field yang diperlukan
     validateData(data);
-    
-    // Simpan ke Google Sheets
     const rowNumber = saveToSheet(data);
-    
-    // Update statistik
     updateStatistics();
+    updateClassStatistics();
     
-    // Kirim notifikasi email (jika diaktifkan)
     if (CONFIG.SEND_EMAIL_NOTIFICATION) {
       sendEmailNotification(data);
     }
     
-    // Log success
     Logger.log('✅ Data berhasil disimpan di baris: ' + rowNumber);
     
-    // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({
         status: 'success',
@@ -72,11 +66,9 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
-    // Log error
     Logger.log('❌ ERROR: ' + error.toString());
     Logger.log('Stack trace: ' + error.stack);
     
-    // Return error response
     return ContentService
       .createTextOutput(JSON.stringify({
         status: 'error',
@@ -91,17 +83,20 @@ function doPost(e) {
 // VALIDASI DATA
 // ============================================================
 function validateData(data) {
-  const requiredFields = ['nama', 'benar', 'total', 'nilai'];
+  const requiredFields = ['nama', 'kelas', 'benar', 'total', 'nilai'];
   
   for (const field of requiredFields) {
-    if (data[field] === undefined || data[field] === null) {
+    if (data[field] === undefined || data[field] === null || data[field] === '') {
       throw new Error(`Field '${field}' tidak ditemukan atau kosong`);
     }
   }
   
-  // Validasi tipe data
   if (typeof data.nama !== 'string' || data.nama.trim() === '') {
     throw new Error('Nama siswa tidak valid');
+  }
+  
+  if (typeof data.kelas !== 'string' || data.kelas.trim() === '') {
+    throw new Error('Kelas tidak valid');
   }
   
   if (typeof data.benar !== 'number' || data.benar < 0) {
@@ -124,42 +119,36 @@ function validateData(data) {
 // ============================================================
 function saveToSheet(data) {
   try {
-    // Buka spreadsheet
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
     
-    // Buat sheet baru jika belum ada
     if (!sheet) {
       sheet = ss.insertSheet(CONFIG.SHEET_NAME);
       createHeaders(sheet);
       Logger.log('📄 Sheet baru dibuat dengan header');
     }
     
-    // Cek apakah ada header, jika tidak buat
     if (sheet.getLastRow() === 0) {
       createHeaders(sheet);
     }
     
-    // Siapkan data untuk row baru
     const timestamp = new Date();
     const row = [
       timestamp,                              // A: Timestamp
       data.nama || 'Unknown',                 // B: Nama Siswa
-      data.benar || 0,                        // C: Jawaban Benar
-      data.total || 0,                        // D: Total Soal
-      data.nilai || 0,                        // E: Nilai
-      data.waktuPengerjaan || 'N/A',          // F: Waktu Pengerjaan (menit)
-      data.pelanggaran || 'Tidak ada',        // G: Pelanggaran
-      data.waktuSelesai || 'Manual',          // H: Status Selesai
-      getStatusLulus(data.nilai),             // I: Status (LULUS/TIDAK LULUS)
-      getPredikat(data.nilai)                 // J: Predikat (A/B/C/D/E)
+      data.kelas || 'N/A',                    // C: Kelas
+      data.benar || 0,                        // D: Jawaban Benar
+      data.total || 0,                        // E: Total Soal
+      data.nilai || 0,                        // F: Nilai
+      data.waktuPengerjaan || 'N/A',          // G: Waktu Pengerjaan (menit)
+      data.pelanggaran || 'Tidak ada',        // H: Pelanggaran
+      data.waktuSelesai || 'Manual',          // I: Status Selesai
+      getStatusLulus(data.nilai),             // J: Status (LULUS/TIDAK LULUS)
+      getPredikat(data.nilai)                 // K: Predikat (A/B/C/D/E)
     ];
     
-    // Tambahkan row ke sheet
     sheet.appendRow(row);
     const lastRow = sheet.getLastRow();
-    
-    // Format cells
     formatRow(sheet, lastRow);
     
     return lastRow;
@@ -176,6 +165,7 @@ function createHeaders(sheet) {
   const headers = [
     'Timestamp',
     'Nama Siswa',
+    'Kelas',
     'Jawaban Benar',
     'Total Soal',
     'Nilai',
@@ -188,27 +178,27 @@ function createHeaders(sheet) {
   
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   
-  // Format header
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground('#0B3C5D');
+  headerRange.setBackground('#667eea');
   headerRange.setFontColor('#FFFFFF');
   headerRange.setFontWeight('bold');
   headerRange.setHorizontalAlignment('center');
+  headerRange.setVerticalAlignment('middle');
   
-  // Freeze header row
   sheet.setFrozenRows(1);
   
   // Set column widths
   sheet.setColumnWidth(1, 150);  // Timestamp
   sheet.setColumnWidth(2, 200);  // Nama
-  sheet.setColumnWidth(3, 120);  // Benar
-  sheet.setColumnWidth(4, 100);  // Total
-  sheet.setColumnWidth(5, 80);   // Nilai
-  sheet.setColumnWidth(6, 180);  // Waktu Pengerjaan
-  sheet.setColumnWidth(7, 200);  // Pelanggaran
-  sheet.setColumnWidth(8, 130);  // Status Selesai
-  sheet.setColumnWidth(9, 120);  // Status
-  sheet.setColumnWidth(10, 100); // Predikat
+  sheet.setColumnWidth(3, 100);  // Kelas
+  sheet.setColumnWidth(4, 120);  // Benar
+  sheet.setColumnWidth(5, 100);  // Total
+  sheet.setColumnWidth(6, 80);   // Nilai
+  sheet.setColumnWidth(7, 180);  // Waktu Pengerjaan
+  sheet.setColumnWidth(8, 250);  // Pelanggaran
+  sheet.setColumnWidth(9, 130);  // Status Selesai
+  sheet.setColumnWidth(10, 120); // Status
+  sheet.setColumnWidth(11, 100); // Predikat
   
   Logger.log('✅ Header tabel dibuat');
 }
@@ -217,45 +207,45 @@ function createHeaders(sheet) {
 // FORMAT ROW DATA
 // ============================================================
 function formatRow(sheet, rowNumber) {
-  // Format timestamp
   sheet.getRange(rowNumber, 1).setNumberFormat(CONFIG.DATE_FORMAT);
   
-  // Format nilai (bold dan center)
-  const nilaiRange = sheet.getRange(rowNumber, 5);
+  const nilaiRange = sheet.getRange(rowNumber, 6);
   nilaiRange.setFontWeight('bold');
   nilaiRange.setHorizontalAlignment('center');
   
-  // Warna berdasarkan nilai
-  const nilai = sheet.getRange(rowNumber, 5).getValue();
+  const nilai = sheet.getRange(rowNumber, 6).getValue();
   if (nilai >= 75) {
-    nilaiRange.setBackground('#D5F5E3'); // Hijau muda (lulus)
+    nilaiRange.setBackground('#D5F5E3');
     nilaiRange.setFontColor('#1E8449');
   } else {
-    nilaiRange.setBackground('#FADBD8'); // Merah muda (tidak lulus)
+    nilaiRange.setBackground('#FADBD8');
     nilaiRange.setFontColor('#922B21');
   }
   
-  // Format status
-  const statusRange = sheet.getRange(rowNumber, 9);
+  const statusRange = sheet.getRange(rowNumber, 10);
   statusRange.setHorizontalAlignment('center');
   statusRange.setFontWeight('bold');
   
   if (nilai >= 75) {
-    statusRange.setBackground('#2ECC71');
+    statusRange.setBackground('#4facfe');
     statusRange.setFontColor('#FFFFFF');
   } else {
-    statusRange.setBackground('#E74C3C');
+    statusRange.setBackground('#fa709a');
     statusRange.setFontColor('#FFFFFF');
   }
   
-  // Format predikat
-  const predikatRange = sheet.getRange(rowNumber, 10);
+  const predikatRange = sheet.getRange(rowNumber, 11);
   predikatRange.setHorizontalAlignment('center');
   predikatRange.setFontWeight('bold');
   
-  // Alternate row colors (zebra striping)
+  // Kelas cell
+  const kelasRange = sheet.getRange(rowNumber, 3);
+  kelasRange.setHorizontalAlignment('center');
+  kelasRange.setFontWeight('bold');
+  kelasRange.setBackground('#f0f0f0');
+  
   if (rowNumber % 2 === 0) {
-    sheet.getRange(rowNumber, 1, 1, 10).setBackground('#F5F5F5');
+    sheet.getRange(rowNumber, 1, 1, 11).setBackground('#F8F9FA');
   }
 }
 
@@ -275,7 +265,7 @@ function getPredikat(nilai) {
 }
 
 // ============================================================
-// UPDATE STATISTIK
+// UPDATE STATISTIK UMUM
 // ============================================================
 function updateStatistics() {
   try {
@@ -283,27 +273,24 @@ function updateStatistics() {
     const dataSheet = ss.getSheetByName(CONFIG.SHEET_NAME);
     
     if (!dataSheet || dataSheet.getLastRow() <= 1) {
-      return; // Tidak ada data
+      return;
     }
     
     let statsSheet = ss.getSheetByName(CONFIG.STATS_SHEET_NAME);
     
-    // Buat sheet statistik jika belum ada
     if (!statsSheet) {
       statsSheet = ss.insertSheet(CONFIG.STATS_SHEET_NAME);
     }
     
     statsSheet.clear();
     
-    // Get data range
-    const dataRange = dataSheet.getRange(2, 1, dataSheet.getLastRow() - 1, 10);
+    const dataRange = dataSheet.getRange(2, 1, dataSheet.getLastRow() - 1, 11);
     const values = dataRange.getValues();
     
-    // Hitung statistik
     const totalSiswa = values.length;
-    const nilaiArray = values.map(row => row[4]); // Kolom E (Nilai)
+    const nilaiArray = values.map(row => row[5]); // Kolom F (Nilai)
     
-    const totalLulus = values.filter(row => row[4] >= 75).length;
+    const totalLulus = values.filter(row => row[5] >= 75).length;
     const totalTidakLulus = totalSiswa - totalLulus;
     const persenLulus = ((totalLulus / totalSiswa) * 100).toFixed(1);
     
@@ -311,14 +298,15 @@ function updateStatistics() {
     const nilaiTerendah = Math.min(...nilaiArray);
     const rataRata = (nilaiArray.reduce((a, b) => a + b, 0) / totalSiswa).toFixed(2);
     
-    // Hitung predikat
-    const predikatA = values.filter(row => row[4] >= 90).length;
-    const predikatB = values.filter(row => row[4] >= 80 && row[4] < 90).length;
-    const predikatC = values.filter(row => row[4] >= 70 && row[4] < 80).length;
-    const predikatD = values.filter(row => row[4] >= 60 && row[4] < 70).length;
-    const predikatE = values.filter(row => row[4] < 60).length;
+    const predikatA = values.filter(row => row[5] >= 90).length;
+    const predikatB = values.filter(row => row[5] >= 80 && row[5] < 90).length;
+    const predikatC = values.filter(row => row[5] >= 70 && row[5] < 80).length;
+    const predikatD = values.filter(row => row[5] >= 60 && row[5] < 70).length;
+    const predikatE = values.filter(row => row[5] < 60).length;
     
-    // Tulis statistik
+    // Hitung pelanggaran
+    const totalPelanggaran = values.filter(row => row[7] !== 'Tidak ada').length;
+    
     const stats = [
       ['📊 STATISTIK UJIAN ENGLISH TEST', ''],
       ['Terakhir diupdate:', new Date()],
@@ -339,27 +327,183 @@ function updateStatistics() {
       ['Predikat B (80-89)', predikatB],
       ['Predikat C (70-79)', predikatC],
       ['Predikat D (60-69)', predikatD],
-      ['Predikat E (<60)', predikatE]
+      ['Predikat E (<60)', predikatE],
+      ['', ''],
+      ['⚠️ PELANGGARAN', ''],
+      ['Total Siswa dengan Pelanggaran', totalPelanggaran]
     ];
     
     statsSheet.getRange(1, 1, stats.length, 2).setValues(stats);
     
-    // Format statistik sheet
-    statsSheet.getRange(1, 1).setFontSize(14).setFontWeight('bold').setBackground('#0B3C5D').setFontColor('#FFFFFF');
+    // Format
+    statsSheet.getRange(1, 1).setFontSize(16).setFontWeight('bold').setBackground('#667eea').setFontColor('#FFFFFF');
     statsSheet.getRange('A1:B1').merge();
-    
-    statsSheet.setColumnWidth(1, 250);
+    statsSheet.setColumnWidth(1, 280);
     statsSheet.setColumnWidth(2, 150);
     
     // Bold untuk kategori
-    statsSheet.getRange('A4').setFontWeight('bold').setBackground('#E8F4F8');
-    statsSheet.getRange('A10').setFontWeight('bold').setBackground('#E8F4F8');
-    statsSheet.getRange('A15').setFontWeight('bold').setBackground('#E8F4F8');
+    const categoryRows = [4, 10, 15, 22];
+    categoryRows.forEach(row => {
+      statsSheet.getRange(row, 1, 1, 2).setFontWeight('bold').setBackground('#E8F4F8');
+    });
     
-    Logger.log('✅ Statistik diupdate');
+    Logger.log('✅ Statistik umum diupdate');
     
   } catch (error) {
     Logger.log('⚠️ Gagal update statistik: ' + error.message);
+  }
+}
+
+// ============================================================
+// UPDATE STATISTIK PER KELAS
+// ============================================================
+function updateClassStatistics() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const dataSheet = ss.getSheetByName(CONFIG.SHEET_NAME);
+    
+    if (!dataSheet || dataSheet.getLastRow() <= 1) {
+      return;
+    }
+    
+    let classStatsSheet = ss.getSheetByName(CONFIG.CLASS_STATS_SHEET_NAME);
+    
+    if (!classStatsSheet) {
+      classStatsSheet = ss.insertSheet(CONFIG.CLASS_STATS_SHEET_NAME);
+    }
+    
+    classStatsSheet.clear();
+    
+    const dataRange = dataSheet.getRange(2, 1, dataSheet.getLastRow() - 1, 11);
+    const values = dataRange.getValues();
+    
+    // Group by class
+    const classSummary = {};
+    
+    values.forEach(row => {
+      const kelas = row[2]; // Kolom C (Kelas)
+      const nilai = row[5]; // Kolom F (Nilai)
+      
+      if (!classSummary[kelas]) {
+        classSummary[kelas] = {
+          total: 0,
+          lulus: 0,
+          tidakLulus: 0,
+          nilaiArray: [],
+          predikatA: 0,
+          predikatB: 0,
+          predikatC: 0,
+          predikatD: 0,
+          predikatE: 0
+        };
+      }
+      
+      classSummary[kelas].total++;
+      classSummary[kelas].nilaiArray.push(nilai);
+      
+      if (nilai >= 75) classSummary[kelas].lulus++;
+      else classSummary[kelas].tidakLulus++;
+      
+      if (nilai >= 90) classSummary[kelas].predikatA++;
+      else if (nilai >= 80) classSummary[kelas].predikatB++;
+      else if (nilai >= 70) classSummary[kelas].predikatC++;
+      else if (nilai >= 60) classSummary[kelas].predikatD++;
+      else classSummary[kelas].predikatE++;
+    });
+    
+    // Create header
+    const headers = [
+      ['📚 STATISTIK PER KELAS', '', '', '', '', '', '', '', '', '']
+    ];
+    classStatsSheet.getRange(1, 1, 1, 10).setValues(headers);
+    classStatsSheet.getRange('A1:J1').merge();
+    classStatsSheet.getRange(1, 1).setFontSize(16).setFontWeight('bold')
+      .setBackground('#667eea').setFontColor('#FFFFFF').setHorizontalAlignment('center');
+    
+    const tableHeaders = [
+      'Kelas',
+      'Total Siswa',
+      'Lulus',
+      'Tidak Lulus',
+      '% Lulus',
+      'Rata-rata',
+      'Tertinggi',
+      'Terendah',
+      'Predikat A',
+      'Predikat B-E'
+    ];
+    
+    classStatsSheet.getRange(3, 1, 1, 10).setValues([tableHeaders]);
+    classStatsSheet.getRange(3, 1, 1, 10)
+      .setFontWeight('bold')
+      .setBackground('#764ba2')
+      .setFontColor('#FFFFFF')
+      .setHorizontalAlignment('center');
+    
+    // Fill data
+    let rowIndex = 4;
+    const sortedClasses = Object.keys(classSummary).sort();
+    
+    sortedClasses.forEach(kelas => {
+      const data = classSummary[kelas];
+      const avg = (data.nilaiArray.reduce((a, b) => a + b, 0) / data.total).toFixed(2);
+      const max = Math.max(...data.nilaiArray);
+      const min = Math.min(...data.nilaiArray);
+      const persenLulus = ((data.lulus / data.total) * 100).toFixed(1);
+      const predikatBtoE = data.predikatB + data.predikatC + data.predikatD + data.predikatE;
+      
+      const row = [
+        kelas,
+        data.total,
+        data.lulus,
+        data.tidakLulus,
+        persenLulus + '%',
+        avg,
+        max,
+        min,
+        data.predikatA,
+        predikatBtoE
+      ];
+      
+      classStatsSheet.getRange(rowIndex, 1, 1, 10).setValues([row]);
+      
+      // Color coding based on average
+      const avgRange = classStatsSheet.getRange(rowIndex, 6);
+      if (avg >= 80) {
+        avgRange.setBackground('#D5F5E3').setFontColor('#1E8449');
+      } else if (avg >= 70) {
+        avgRange.setBackground('#FCF3CF').setFontColor('#7D6608');
+      } else {
+        avgRange.setBackground('#FADBD8').setFontColor('#922B21');
+      }
+      
+      // Center align numeric columns
+      classStatsSheet.getRange(rowIndex, 2, 1, 9).setHorizontalAlignment('center');
+      
+      // Alternate row colors
+      if (rowIndex % 2 === 0) {
+        classStatsSheet.getRange(rowIndex, 1, 1, 10).setBackground('#F8F9FA');
+      }
+      
+      rowIndex++;
+    });
+    
+    // Set column widths
+    classStatsSheet.setColumnWidth(1, 120);  // Kelas
+    classStatsSheet.setColumnWidth(2, 100);  // Total Siswa
+    classStatsSheet.setColumnWidth(3, 80);   // Lulus
+    classStatsSheet.setColumnWidth(4, 100);  // Tidak Lulus
+    classStatsSheet.setColumnWidth(5, 80);   // % Lulus
+    classStatsSheet.setColumnWidth(6, 90);   // Rata-rata
+    classStatsSheet.setColumnWidth(7, 90);   // Tertinggi
+    classStatsSheet.setColumnWidth(8, 90);   // Terendah
+    classStatsSheet.setColumnWidth(9, 90);   // Predikat A
+    classStatsSheet.setColumnWidth(10, 100); // Predikat B-E
+    
+    Logger.log('✅ Statistik per kelas diupdate');
+    
+  } catch (error) {
+    Logger.log('⚠️ Gagal update statistik kelas: ' + error.message);
   }
 }
 
@@ -368,7 +512,7 @@ function updateStatistics() {
 // ============================================================
 function sendEmailNotification(data) {
   try {
-    const subject = `📊 Hasil Ujian Baru - ${data.nama}`;
+    const subject = `📊 Hasil Ujian Baru - ${data.nama} (${data.kelas})`;
     const status = data.nilai >= 75 ? '✅ LULUS' : '❌ TIDAK LULUS';
     
     const body = `
@@ -377,6 +521,7 @@ SMK Negeri 1 Maluku Tengah
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Nama Siswa      : ${data.nama}
+Kelas           : ${data.kelas}
 Nilai Akhir     : ${data.nilai}
 Status          : ${status}
 
@@ -415,6 +560,7 @@ function testPost() {
     postData: {
       contents: JSON.stringify({
         nama: 'Budi Santoso',
+        kelas: 'X TJKT 1',
         benar: 20,
         total: 25,
         nilai: 80,
@@ -429,14 +575,13 @@ function testPost() {
   Logger.log('📝 Test Result: ' + result.getContent());
 }
 
-// Jalankan fungsi ini untuk test multiple entries
 function testMultipleEntries() {
   const students = [
-    { nama: 'Andi Pratama', benar: 23, total: 25, nilai: 92, waktuPengerjaan: '32.5', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
-    { nama: 'Siti Rahmawati', benar: 19, total: 25, nilai: 76, waktuPengerjaan: '38.2', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
-    { nama: 'Joko Widodo', benar: 15, total: 25, nilai: 60, waktuPengerjaan: '42.0', pelanggaran: '1 pelanggaran: Tab switch', waktuSelesai: 'Selesai manual' },
-    { nama: 'Dewi Lestari', benar: 21, total: 25, nilai: 84, waktuPengerjaan: '30.8', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
-    { nama: 'Rudi Hermawan', benar: 17, total: 25, nilai: 68, waktuPengerjaan: '40.5', pelanggaran: 'Tidak ada', waktuSelesai: 'Waktu habis' }
+    { nama: 'Andi Pratama', kelas: 'X TJKT 1', benar: 23, total: 25, nilai: 92, waktuPengerjaan: '32.5', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
+    { nama: 'Siti Rahmawati', kelas: 'X TJKT 1', benar: 19, total: 25, nilai: 76, waktuPengerjaan: '38.2', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
+    { nama: 'Joko Widodo', kelas: 'X TJKT 2', benar: 15, total: 25, nilai: 60, waktuPengerjaan: '42.0', pelanggaran: '1 pelanggaran: Tab switch', waktuSelesai: 'Selesai manual' },
+    { nama: 'Dewi Lestari', kelas: 'XI TJKT 1', benar: 21, total: 25, nilai: 84, waktuPengerjaan: '30.8', pelanggaran: 'Tidak ada', waktuSelesai: 'Selesai manual' },
+    { nama: 'Rudi Hermawan', kelas: 'XI TJKT 2', benar: 17, total: 25, nilai: 68, waktuPengerjaan: '40.5', pelanggaran: 'Tidak ada', waktuSelesai: 'Waktu habis' }
   ];
   
   students.forEach(student => {
@@ -447,20 +592,16 @@ function testMultipleEntries() {
     };
     
     const result = doPost(testData);
-    Logger.log(`✅ ${student.nama}: ${result.getContent()}`);
-    Utilities.sleep(500); // Delay 500ms antar request
+    Logger.log(`✅ ${student.nama} (${student.kelas}): ${result.getContent()}`);
+    Utilities.sleep(500);
   });
   
   Logger.log('🎉 Test selesai! Cek sheet Anda.');
 }
 
 // ============================================================
-// FUNGSI UTILITY TAMBAHAN
+// UTILITY FUNCTIONS
 // ============================================================
-
-/**
- * Fungsi untuk menghapus semua data (HATI-HATI!)
- */
 function clearAllData() {
   const ui = SpreadsheetApp.getUi();
   const response = ui.alert(
@@ -482,27 +623,18 @@ function clearAllData() {
   }
 }
 
-/**
- * Fungsi untuk export ke PDF
- */
 function exportToPDF() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
-  
   const url = 'https://docs.google.com/spreadsheets/d/' + ss.getId() + '/export?format=pdf';
-  
   Logger.log('📄 PDF Export URL: ' + url);
-  
   return url;
 }
 
-/**
- * Fungsi untuk membuat menu custom di Sheets
- */
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('📊 Exam Tools')
     .addItem('🔄 Update Statistik', 'updateStatistics')
+    .addItem('📚 Update Statistik Per Kelas', 'updateClassStatistics')
     .addItem('🧪 Test Data Entry', 'testPost')
     .addItem('🧪 Test Multiple Entries', 'testMultipleEntries')
     .addSeparator()
