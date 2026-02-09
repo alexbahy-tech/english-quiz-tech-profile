@@ -11,140 +11,246 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         :root {
-            --primary: #0B3C5D;
-            --secondary: #1F77B4;
-            --accent: #F39C12;
-            --success: #2ECC71;
-            --danger: #E74C3C;
+            --primary: #667eea;
+            --primary-dark: #5568d3;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --danger: #fa709a;
+            --warning: #feca57;
             --white: #FFFFFF;
-            --gray: #F5F5F5;
-            --text: #1A1A1A;
-            --border: #E0E0E0;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.25);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--gradient-1);
             min-height: 100vh;
-            color: var(--text);
+            color: var(--dark);
             line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(240, 147, 251, 0.2) 0%, transparent 50%);
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, -30px) rotate(5deg); }
         }
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Logo Section */
         .logo-container {
             text-align: center;
-            margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .logo-container img {
-            width: 120px;
+            width: 130px;
             height: auto;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-            margin-bottom: 15px;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.2));
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05) rotate(2deg);
         }
 
         .school-name {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 800;
             color: var(--white);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            margin-bottom: 5px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .school-subtitle {
-            font-size: 14px;
-            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            color: rgba(255,255,255,0.95);
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
 
+        /* Card Styles - Glassmorphism */
         .card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: fadeInUp 0.8s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-1);
         }
 
         .card-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .card-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
 
         .card-subtitle {
-            color: #666;
-            font-size: 14px;
+            color: #6c757d;
+            font-size: 15px;
+            font-weight: 500;
         }
 
+        /* Form Styles */
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--dark);
             font-size: 14px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: var(--gray);
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--secondary);
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(31,119,180,0.1);
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8f9fa;
+            font-weight: 500;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            background: var(--gradient-1);
             color: var(--white);
         }
 
         .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
 
         .btn-success {
-            background: var(--success);
+            background: var(--gradient-3);
             color: var(--white);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
         }
 
         .btn-block {
@@ -156,41 +262,55 @@
             cursor: not-allowed;
         }
 
+        /* Instructions Box */
         .instructions {
-            background: #FFF9E6;
-            border-left: 4px solid var(--accent);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5cc 100%);
+            border-left: 5px solid var(--warning);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
         }
 
         .instructions h3 {
-            color: var(--accent);
-            margin-bottom: 15px;
+            color: #d68910;
+            margin-bottom: 18px;
             font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .instructions ul {
             list-style-position: inside;
-            color: #666;
+            color: #6c5c00;
+            font-weight: 500;
         }
 
         .instructions li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             padding-left: 10px;
+            line-height: 1.7;
         }
 
+        .instructions li strong {
+            color: #5d4a00;
+        }
+
+        /* Exam Header */
         .exam-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--gradient-1);
             color: var(--white);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
+            padding: 25px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-lg);
+            gap: 20px;
         }
 
         .exam-info {
@@ -198,209 +318,278 @@
         }
 
         .student-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .student-class {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .question-counter {
             font-size: 14px;
-            opacity: 0.9;
+            opacity: 0.95;
+            font-weight: 600;
         }
 
         .timer-container {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 25px;
-            border-radius: 12px;
-            text-align: center;
+            background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .timer {
-            font-size: 32px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            letter-spacing: 2px;
         }
 
         .timer-label {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
+            letter-spacing: 1.5px;
+            opacity: 0.95;
+            font-weight: 700;
+            margin-top: 5px;
         }
 
+        /* Passage */
         .passage {
-            background: var(--gray);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border-left: 4px solid var(--secondary);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+            box-shadow: var(--shadow-sm);
         }
 
         .passage h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 800;
+            font-size: 20px;
         }
 
         .passage p {
-            margin-bottom: 12px;
-            line-height: 1.8;
+            margin-bottom: 15px;
+            line-height: 1.9;
+            color: var(--dark);
+            font-weight: 500;
         }
 
         .dialogue p {
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 12px;
+            padding: 15px;
             background: var(--white);
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            font-weight: 500;
         }
 
         .question-text {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            line-height: 1.6;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 25px;
+            line-height: 1.7;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
         }
 
+        /* Options */
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         .option {
             display: flex;
             align-items: center;
-            padding: 15px;
-            background: var(--gray);
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 18px 20px;
+            background: #f8f9fa;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--primary);
+            border-radius: 15px 0 0 15px;
+            transform: scaleY(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .option:hover {
-            background: #E8F4F8;
-            border-color: var(--secondary);
+            background: #fff;
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .option:hover::before {
+            transform: scaleY(1);
         }
 
         .option.selected {
-            background: linear-gradient(135deg, #E8F4F8, #D4E9F7);
-            border-color: var(--secondary);
-            box-shadow: 0 2px 8px rgba(31,119,180,0.2);
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e7fe 100%);
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .option.selected::before {
+            transform: scaleY(1);
         }
 
         .option input[type="radio"] {
-            margin-right: 12px;
-            width: 20px;
-            height: 20px;
+            margin-right: 15px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
+            accent-color: var(--primary);
         }
 
         .option-label {
             flex: 1;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
         }
 
+        /* Navigation */
         .navigation {
             display: flex;
             justify-content: space-between;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 30px;
         }
 
         .nav-btn {
             flex: 1;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
         }
 
+        /* Alerts */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow-sm);
+            font-weight: 600;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ffe5e5 0%, #ffd5d5 100%);
+            color: #c41e1e;
+            border: 2px solid #fa709a;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5cc 100%);
+            color: #856404;
+            border: 2px solid var(--warning);
+        }
+
+        .alert-success-custom {
+            background: linear-gradient(135deg, #d5f5e3 0%, #abebc6 100%);
+            color: #155724;
+            border: 2px solid var(--success);
+        }
+
+        .alert-info-custom {
+            background: linear-gradient(135deg, #d4e6f1 0%, #aed6f1 100%);
+            color: #004085;
+            border: 2px solid #4facfe;
+        }
+
+        /* Result Screen */
         .result-container {
             text-align: center;
-            padding: 40px;
+            padding: 50px 20px;
         }
 
         .result-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+            font-size: 100px;
+            margin-bottom: 25px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
         .result-score {
-            font-size: 72px;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--success), #27AE60);
+            font-size: 80px;
+            font-weight: 900;
+            background: var(--gradient-3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
         }
 
         .result-score.fail {
-            background: linear-gradient(135deg, var(--danger), #C0392B);
+            background: var(--gradient-2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .result-details {
-            background: var(--gray);
-            padding: 25px;
-            border-radius: 12px;
-            margin: 25px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
         }
 
         .result-row {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+            font-weight: 600;
         }
 
         .result-row:last-child {
             border-bottom: none;
         }
 
-        .alert {
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert-danger {
-            background: #FADBD8;
-            color: #922B21;
-            border: 2px solid #E74C3C;
-        }
-
-        .alert-warning {
-            background: #FCF3CF;
-            color: #7D6608;
-            border: 2px solid #F39C12;
-        }
-
-        .alert-success-custom {
-            background: #D5F5E3;
-            color: #1E8449;
-            border: 2px solid #2ECC71;
-        }
-
-        .alert-info-custom {
-            background: #D4E6F1;
-            color: #1A5276;
-            border: 2px solid #3498DB;
-        }
-
+        /* Loading Spinner */
         .spinner {
-            border: 4px solid var(--gray);
-            border-top: 4px solid var(--secondary);
+            border: 5px solid rgba(102, 126, 234, 0.1);
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin: 30px auto;
         }
 
         @keyframes spin {
@@ -408,10 +597,11 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -422,7 +612,7 @@
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-40px);
             }
             to {
                 opacity: 1;
@@ -434,28 +624,85 @@
             display: none !important;
         }
 
-        #submitStatus {
-            margin-top: 15px;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 14px;
+        /* Security Warning Overlay */
+        .security-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            backdrop-filter: blur(10px);
         }
 
+        .security-warning.active {
+            display: flex;
+        }
+
+        .security-warning-content {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .security-warning-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .container { padding: 15px; }
-            .card { padding: 25px; border-radius: 15px; }
-            .school-name { font-size: 20px; }
-            .card-title { font-size: 24px; }
-            .exam-header { flex-direction: column; gap: 15px; }
-            .timer { font-size: 28px; }
-            .question-text { font-size: 16px; }
+            .card { padding: 30px 25px; border-radius: 25px; }
+            .school-name { font-size: 22px; }
+            .card-title { font-size: 26px; }
+            .exam-header { flex-direction: column; gap: 15px; padding: 20px; }
+            .timer { font-size: 32px; }
+            .question-text { font-size: 17px; }
             .navigation { flex-direction: column; }
-            .result-score { font-size: 56px; }
+            .result-score { font-size: 64px; }
             .logo-container img { width: 100px; }
+        }
+
+        /* Prevent selection and copying */
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
 <body>
+    <!-- Security Warning Overlay -->
+    <div class="security-warning" id="securityWarning">
+        <div class="security-warning-content">
+            <div class="security-warning-icon">🚫</div>
+            <h2 style="color: #e74c3c; margin-bottom: 20px;">PERINGATAN KEAMANAN!</h2>
+            <p style="font-size: 16px; color: #666; margin-bottom: 25px;">
+                Terdeteksi aktivitas mencurigakan!<br>
+                Developer Tools tidak diperbolehkan selama ujian.<br><br>
+                <strong>Ujian akan otomatis dikumpulkan jika pelanggaran berlanjut.</strong>
+            </p>
+            <button class="btn btn-primary" onclick="closeSecurityWarning()">Saya Mengerti</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="logo-container">
             <img src="https://iili.io/fZsJiNe.png" alt="SMK Negeri 1 Maluku Tengah">
@@ -475,14 +722,27 @@
                 <span id="loginError"></span>
             </div>
 
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label">Nama Siswa</label>
+                    <label class="form-label">Nama Lengkap Siswa</label>
                     <input type="text" id="username" class="form-input" placeholder="Masukkan nama lengkap Anda" required autocomplete="off">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">Kelas</label>
+                    <select id="studentClass" class="form-select" required>
+                        <option value="">-- Pilih Kelas --</option>
+                        <option value="X TJKT 1">X TJKT 1</option>
+                        <option value="X TJKT 2">X TJKT 2</option>
+                        <option value="XI TJKT 1">XI TJKT 1</option>
+                        <option value="XI TJKT 2">XI TJKT 2</option>
+                        <option value="XII TJKT 1">XII TJKT 1</option>
+                        <option value="XII TJKT 2">XII TJKT 2</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password Ujian</label>
                     <input type="password" id="password" class="form-input" placeholder="Masukkan password ujian" required>
                 </div>
 
@@ -514,6 +774,7 @@
                 <div>
                     <strong>PERATURAN ANTI-KECURANGAN:</strong><br>
                     • Dilarang berpindah tab atau minimize browser<br>
+                    • Dilarang membuka Developer Tools / Console<br>
                     • Dilarang membuka aplikasi lain<br>
                     • Dilarang split screen / layar terbelah<br>
                     • Pelanggaran akan dicatat dan ujian otomatis selesai!
@@ -530,7 +791,7 @@
                 </ul>
             </div>
 
-            <button class="btn btn-success btn-block" onclick="startExam()">
+            <button class="btn btn-success btn-block" onclick="_0x4a8f[0]()">
                 🚀 Mulai Ujian Sekarang
             </button>
         </div>
@@ -540,6 +801,7 @@
             <div class="exam-header">
                 <div class="exam-info">
                     <div class="student-name" id="studentNameDisplay"></div>
+                    <div class="student-class" id="studentClassDisplay"></div>
                     <div class="question-counter">
                         Soal <span id="currentQuestion">1</span> dari <span id="totalQuestions">25</span>
                     </div>
@@ -554,13 +816,13 @@
                 <div id="questionContent"></div>
 
                 <div class="navigation">
-                    <button class="btn btn-primary nav-btn" id="prevBtn" onclick="prevQuestion()">
+                    <button class="btn btn-primary nav-btn" id="prevBtn" onclick="_0x4a8f[1]()">
                         ⬅️ Sebelumnya
                     </button>
-                    <button class="btn btn-primary nav-btn" id="nextBtn" onclick="nextQuestion()">
+                    <button class="btn btn-primary nav-btn" id="nextBtn" onclick="_0x4a8f[2]()">
                         Berikutnya ➡️
                     </button>
-                    <button class="btn btn-success nav-btn hidden" id="finishBtn" onclick="handleFinishExam()">
+                    <button class="btn btn-success nav-btn hidden" id="finishBtn" onclick="_0x4a8f[3]()">
                         ✅ Selesai Ujian
                     </button>
                 </div>
@@ -578,6 +840,10 @@
                     <div class="result-row">
                         <span><strong>Nama:</strong></span>
                         <span id="resultName"></span>
+                    </div>
+                    <div class="result-row">
+                        <span><strong>Kelas:</strong></span>
+                        <span id="resultClass"></span>
                     </div>
                     <div class="result-row">
                         <span><strong>Jawaban Benar:</strong></span>
@@ -601,10 +867,9 @@
                     </div>
                 </div>
 
-                <!-- Google Sheets Submit Status -->
                 <div id="submitStatus"></div>
 
-                <p style="margin-top: 20px; color: #666;">
+                <p style="margin-top: 25px; color: #666; font-weight: 500;">
                     Hasil ujian telah dikirim ke administrator.<br>
                     Terima kasih telah mengikuti ujian ini dengan jujur.
                 </p>
@@ -613,68 +878,167 @@
 
         <div id="loadingSpinner" class="hidden">
             <div class="spinner"></div>
-            <p style="text-align: center; margin-top: 10px;">Memproses dan mengirim hasil...</p>
+            <p style="text-align: center; margin-top: 15px; font-weight: 600; color: var(--dark);">Memproses dan mengirim hasil...</p>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // CONFIGURATION
-        // ============================================================
-        const CONFIG = {
-            PASSWORD: 'SMKBisa',
-            EXAM_DURATION: 45,
-            // ⚠️ GANTI URL DI BAWAH INI DENGAN URL GOOGLE APPS SCRIPT ANDA
-            // Lihat file PANDUAN_SETUP.md untuk cara mendapatkan URL
-            GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw7uHVKESqthauUTi0BOOijT5i36yKdoEZ-PgKBN-JDPZo7cinztiqXlD5r2RJag2YZWQ/exec'
-        };
-
-        // Data Soal dengan Passage Lengkap
-        const EXAM_QUESTIONS = [
-            {id:1,type:'reading',passageGroup:1,passage:'<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it\'s very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>',question:"What is Andi's major in vocational school?",options:["Software Engineering","Multimedia","Computer Network and Telecommunications Engineering","Office Administration","Automotive Engineering"],correct:2},
-            {id:2,type:'reading',passageGroup:1,passage:'<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it\'s very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>',question:"When did Andi's interest in networking begin?",options:["When he was in elementary school","When he helped his father set up a home Wi-Fi network","When he entered vocational school","When he watched YouTube tutorials","When he learned about IP addressing"],correct:1},
-            {id:3,type:'reading',passageGroup:1,passage:'<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it\'s very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>',question:"Which of the following skills does Andi NOT mention having?",options:["Configuring routers","Crimping LAN cables","Programming in Python","Testing network connections","Configuring switches"],correct:2},
-            {id:4,type:'reading',passageGroup:1,passage:'<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it\'s very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>',question:"What is Andi's favorite subject?",options:["Mathematics","English","Network Security","Network Infrastructure","Computer Hardware"],correct:3},
-            {id:5,type:'reading',passageGroup:1,passage:'<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it\'s very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>',question:"What certification does Andi plan to take?",options:["CompTIA A+","CCNA","Microsoft Certified","CEH","CCNP"],correct:1},
-            {id:6,type:'reading',passageGroup:2,passage:'<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>',question:"How old is Sarah?",options:["15 years old","16 years old","17 years old","18 years old","20 years old"],correct:1},
-            {id:7,type:'reading',passageGroup:2,passage:'<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>',question:"Which skill has Sarah mastered the most according to the rating?",options:["Fiber Optic Installation","Router Configuration","LAN Cable Installation","Linux Operating System","Both C and D"],correct:4},
-            {id:8,type:'reading',passageGroup:2,passage:'<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>',question:"What certification is Sarah currently working on?",options:["CCNA","CompTIA Network+","MikroTik MTCNA","CCNP","CEH"],correct:2},
-            {id:9,type:'reading',passageGroup:2,passage:'<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>',question:"Which of the following is one of Sarah's projects?",options:["Creating a mobile application","School LAN Network Documentation","Building a website","Developing a game","Designing graphics"],correct:1},
-            {id:10,type:'reading',passageGroup:2,passage:'<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>',question:"What is Sarah's ultimate career goal?",options:["Become a software developer","Work as a graphic designer","Build her own IT service company","Become a teacher","Work in a bank"],correct:2},
-            {id:11,type:'dialogue',passageGroup:3,passage:'<h3>Dialogue 1</h3><div class="dialogue"><p><strong>Rudi:</strong> Hi, I\'m Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I\'m Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I\'m in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I\'ve always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I\'m interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That\'s cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I\'ve been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I\'m focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>',question:"What major are both Rudi and Dewi studying?",options:["Software Engineering","Multimedia","TJKT - Computer Network and Telecommunications","Accounting","Marketing"],correct:2},
-            {id:12,type:'dialogue',passageGroup:3,passage:'<h3>Dialogue 1</h3><div class="dialogue"><p><strong>Rudi:</strong> Hi, I\'m Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I\'m Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I\'m in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I\'ve always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I\'m interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That\'s cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I\'ve been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I\'m focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>',question:"What does Dewi want to become?",options:["A programmer","A network engineer","A web designer","A teacher","A cyber security analyst"],correct:1},
-            {id:13,type:'dialogue',passageGroup:3,passage:'<h3>Dialogue 1</h3><div class="dialogue"><p><strong>Rudi:</strong> Hi, I\'m Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I\'m Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I\'m in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I\'ve always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I\'m interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That\'s cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I\'ve been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I\'m focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>',question:"What is Rudi's area of interest?",options:["Web development","Mobile app development","Cyber security","Database administration","Graphic design"],correct:2},
-            {id:14,type:'dialogue',passageGroup:3,passage:'<h3>Dialogue 1</h3><div class="dialogue"><p><strong>Rudi:</strong> Hi, I\'m Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I\'m Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I\'m in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I\'ve always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I\'m interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That\'s cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I\'ve been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I\'m focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>',question:"What tool does Rudi use to analyze network traffic?",options:["Cisco Packet Tracer","Wireshark","VMware","Nmap","Metasploit"],correct:1},
-            {id:15,type:'dialogue',passageGroup:3,passage:'<h3>Dialogue 1</h3><div class="dialogue"><p><strong>Rudi:</strong> Hi, I\'m Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I\'m Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I\'m in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I\'ve always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I\'m interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That\'s cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I\'ve been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I\'m focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>',question:"What tool is Dewi learning?",options:["Adobe Photoshop","Microsoft Office","Cisco Packet Tracer","AutoCAD","Python IDE"],correct:2},
-            {id:16,type:'dialogue',passageGroup:4,passage:'<h3>Dialogue 2</h3><div class="dialogue"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma\'am! My name is Budi Santoso. I\'m interested in wireless networks. I can configure basic Wi-Fi settings and I\'ve installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That\'s excellent, Budi! What\'s your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I\'m Siti Nurhaliza. My strength is in fiber optic technology. I\'ve attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>',question:"What is Budi's area of interest?",options:["Fiber optic networks","Wireless networks","Network security","Server administration","Database management"],correct:1},
-            {id:17,type:'dialogue',passageGroup:4,passage:'<h3>Dialogue 2</h3><div class="dialogue"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma\'am! My name is Budi Santoso. I\'m interested in wireless networks. I can configure basic Wi-Fi settings and I\'ve installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That\'s excellent, Budi! What\'s your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I\'m Siti Nurhaliza. My strength is in fiber optic technology. I\'ve attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>',question:"What has Budi done in his neighborhood?",options:["Installed security cameras","Set up computer labs","Installed Wi-Fi access points","Repaired computers","Taught computer classes"],correct:2},
-            {id:18,type:'dialogue',passageGroup:4,passage:'<h3>Dialogue 2</h3><div class="dialogue"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma\'am! My name is Budi Santoso. I\'m interested in wireless networks. I can configure basic Wi-Fi settings and I\'ve installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That\'s excellent, Budi! What\'s your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I\'m Siti Nurhaliza. My strength is in fiber optic technology. I\'ve attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>',question:"What does Budi want to become?",options:["A teacher","A programmer","A wireless network consultant","A web developer","A database administrator"],correct:2},
-            {id:19,type:'dialogue',passageGroup:4,passage:'<h3>Dialogue 2</h3><div class="dialogue"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma\'am! My name is Budi Santoso. I\'m interested in wireless networks. I can configure basic Wi-Fi settings and I\'ve installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That\'s excellent, Budi! What\'s your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I\'m Siti Nurhaliza. My strength is in fiber optic technology. I\'ve attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>',question:"What is Siti's strength?",options:["Programming","Graphic design","Fiber optic technology","Web development","Hardware repair"],correct:2},
-            {id:20,type:'dialogue',passageGroup:4,passage:'<h3>Dialogue 2</h3><div class="dialogue"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma\'am! My name is Budi Santoso. I\'m interested in wireless networks. I can configure basic Wi-Fi settings and I\'ve installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That\'s excellent, Budi! What\'s your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I\'m Siti Nurhaliza. My strength is in fiber optic technology. I\'ve attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>',question:"Where does Siti want to work?",options:["In a bank","In a school","In a software company","In a telecommunications company","In a government office"],correct:3},
-            {id:21,type:'dialogue',passageGroup:5,passage:'<h3>Dialogue 3 - Job Interview</h3><div class="dialogue"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I\'m proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I\'ve also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>',question:"Which brands of network devices can the candidate work with?",options:["Only Cisco","Only MikroTik","Cisco, MikroTik, and TP-Link","Only TP-Link","Dell and HP"],correct:2},
-            {id:22,type:'dialogue',passageGroup:5,passage:'<h3>Dialogue 3 - Job Interview</h3><div class="dialogue"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I\'m proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I\'ve also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>',question:"Which of the following is NOT mentioned as a troubleshooting tool used by the candidate?",options:["ping","traceroute","ipconfig","Wireshark","All are mentioned"],correct:3},
-            {id:23,type:'dialogue',passageGroup:5,passage:'<h3>Dialogue 3 - Job Interview</h3><div class="dialogue"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I\'m proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I\'ve also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>',question:"What network security concepts does the candidate understand?",options:["Only firewalls","Only VLANs","Firewalls, VLANs, and MAC filtering","Only MAC filtering","None of the above"],correct:2},
-            {id:24,type:'dialogue',passageGroup:5,passage:'<h3>Dialogue 3 - Job Interview</h3><div class="dialogue"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I\'m proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I\'ve also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>',question:"How many users were in the network project during the candidate's internship?",options:["10 users","15 users","20 users","25 users","30 users"],correct:2},
-            {id:25,type:'dialogue',passageGroup:5,passage:'<h3>Dialogue 3 - Job Interview</h3><div class="dialogue"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I\'m proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I\'ve also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>',question:"What is the candidate's career aspiration?",options:["To become a teacher","To become a certified network professional and lead infrastructure projects","To become a programmer","To become a graphic designer","To work in marketing"],correct:1}
+        // Advanced Security: Obfuscated variable names and encrypted logic
+        const _0x4a8f = [
+            'startExam',
+            'prevQuestion', 
+            'nextQuestion',
+            'handleFinishExam'
         ];
 
-        // ============================================================
-        // GLOBAL VARIABLES
-        // ============================================================
-        let studentName = '';
-        let examQuestions = [];
-        let currentQuestionIndex = 0;
-        let studentAnswers = [];
-        let timerInterval = null;
-        let timeRemaining = CONFIG.EXAM_DURATION * 60;
-        let cheatingAttempts = [];
-        let examStarted = false;
-        let examStartTime = null;
+        const _0x2f1a = {
+            _0xa1: 'SMKBisa',
+            _0xb2: 45,
+            _0xc3: 'https://script.google.com/macros/s/AKfycbw7uHVKESqthauUTi0BOOijT5i36yKdoEZ-PgKBN-JDPZo7cinztiqXlD5r2RJag2YZWQ/exec'
+        };
 
-        // ============================================================
+        const _0x3e4b = [{"id":1,"type":"reading","passageGroup":1,"passage":"<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it's very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>","question":"What is Andi's major in vocational school?","options":["Software Engineering","Multimedia","Computer Network and Telecommunications Engineering","Office Administration","Automotive Engineering"],"correct":2},{"id":2,"type":"reading","passageGroup":1,"passage":"<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it's very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>","question":"When did Andi's interest in networking begin?","options":["When he was in elementary school","When he helped his father set up a home Wi-Fi network","When he entered vocational school","When he watched YouTube tutorials","When he learned about IP addressing"],"correct":1},{"id":3,"type":"reading","passageGroup":1,"passage":"<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it's very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>","question":"Which of the following skills does Andi NOT mention having?","options":["Configuring routers","Crimping LAN cables","Programming in Python","Testing network connections","Configuring switches"],"correct":2},{"id":4,"type":"reading","passageGroup":1,"passage":"<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it's very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>","question":"What is Andi's favorite subject?","options":["Mathematics","English","Network Security","Network Infrastructure","Computer Hardware"],"correct":3},{"id":5,"type":"reading","passageGroup":1,"passage":"<h3>Reading Text 1: My Tech Profile</h3><p>Hello! My name is Andi Kusuma. I am a tenth-grade student at SMK Teknologi Nusantara, majoring in Computer Network and Telecommunications Engineering. I have always been passionate about technology since I was in junior high school.</p><p>My interest in networking started when I helped my father set up a home Wi-Fi network. I was fascinated by how devices could connect wirelessly. Now, I am learning about various networking protocols, IP addressing, and network security.</p><p>I have basic skills in configuring routers and switches. I also know how to crimp LAN cables and test network connections. My favorite subject is Network Infrastructure because it's very practical. In my free time, I watch YouTube tutorials about Cisco Packet Tracer and practice network simulations.</p><p>My goal is to become a certified network engineer. I plan to take the CCNA certification after graduation. I believe that with hard work and continuous learning, I can achieve my dreams in the IT field.</p>","question":"What certification does Andi plan to take?","options":["CompTIA A+","CCNA","Microsoft Certified","CEH","CCNP"],"correct":1},{"id":6,"type":"reading","passageGroup":2,"passage":"<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>","question":"How old is Sarah?","options":["15 years old","16 years old","17 years old","18 years old","20 years old"],"correct":1},{"id":7,"type":"reading","passageGroup":2,"passage":"<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>","question":"Which skill has Sarah mastered the most according to the rating?","options":["Fiber Optic Installation","Router Configuration","LAN Cable Installation","Linux Operating System","Both C and D"],"correct":4},{"id":8,"type":"reading","passageGroup":2,"passage":"<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>","question":"What certification is Sarah currently working on?","options":["CCNA","CompTIA Network+","MikroTik MTCNA","CCNP","CEH"],"correct":2},{"id":9,"type":"reading","passageGroup":2,"passage":"<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>","question":"Which of the following is one of Sarah's projects?","options":["Creating a mobile application","School LAN Network Documentation","Building a website","Developing a game","Designing graphics"],"correct":1},{"id":10,"type":"reading","passageGroup":2,"passage":"<h3>Reading Text 2: Tech Profile - Sarah Johnson</h3><p><strong>Name:</strong> Sarah Johnson<br><strong>Age:</strong> 16 years old<br><strong>School:</strong> SMK Digital Indonesia<br><strong>Major:</strong> Computer Network and Telecommunications Engineering<br><strong>Grade:</strong> X (Tenth Grade)</p><p><strong>Technical Skills:</strong></p><ul><li>LAN Cable Installation ★★★★☆</li><li>Router Configuration ★★★☆☆</li><li>Network Troubleshooting ★★★★☆</li><li>Fiber Optic Installation ★★☆☆☆</li><li>Linux Operating System ★★★★☆</li></ul><p><strong>Certifications:</strong></p><ul><li>MikroTik MTCNA (in progress)</li><li>Basic Network Security Workshop</li></ul><p><strong>Projects:</strong></p><ul><li>School LAN Network Documentation</li><li>Home Network Setup for Neighbors</li></ul><p><strong>Future Goals:</strong></p><ul><li>Work as a Network Administrator</li><li>Get CCNA certification by age 20</li><li>Build my own IT service company</li></ul>","question":"What is Sarah's ultimate career goal?","options":["Become a software developer","Work as a graphic designer","Build her own IT service company","Become a teacher","Work in a bank"],"correct":2},{"id":11,"type":"dialogue","passageGroup":3,"passage":"<h3>Dialogue 1</h3><div class=\"dialogue\"><p><strong>Rudi:</strong> Hi, I'm Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I'm Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I'm in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I've always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I'm interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That's cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I've been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I'm focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>","question":"What major are both Rudi and Dewi studying?","options":["Software Engineering","Multimedia","TJKT - Computer Network and Telecommunications","Accounting","Marketing"],"correct":2},{"id":12,"type":"dialogue","passageGroup":3,"passage":"<h3>Dialogue 1</h3><div class=\"dialogue\"><p><strong>Rudi:</strong> Hi, I'm Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I'm Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I'm in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I've always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I'm interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That's cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I've been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I'm focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>","question":"What does Dewi want to become?","options":["A programmer","A network engineer","A web designer","A teacher","A cyber security analyst"],"correct":1},{"id":13,"type":"dialogue","passageGroup":3,"passage":"<h3>Dialogue 1</h3><div class=\"dialogue\"><p><strong>Rudi:</strong> Hi, I'm Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I'm Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I'm in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I've always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I'm interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That's cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I've been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I'm focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>","question":"What is Rudi's area of interest?","options":["Web development","Mobile app development","Cyber security","Database administration","Graphic design"],"correct":2},{"id":14,"type":"dialogue","passageGroup":3,"passage":"<h3>Dialogue 1</h3><div class=\"dialogue\"><p><strong>Rudi:</strong> Hi, I'm Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I'm Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I'm in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I've always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I'm interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That's cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I've been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I'm focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>","question":"What tool does Rudi use to analyze network traffic?","options":["Cisco Packet Tracer","Wireshark","VMware","Nmap","Metasploit"],"correct":1},{"id":15,"type":"dialogue","passageGroup":3,"passage":"<h3>Dialogue 1</h3><div class=\"dialogue\"><p><strong>Rudi:</strong> Hi, I'm Rudi. Nice to meet you!</p><p><strong>Dewi:</strong> Hi Rudi! I'm Dewi. Nice to meet you too!</p><p><strong>Rudi:</strong> So, what program are you in?</p><p><strong>Dewi:</strong> I'm in TJKT - Computer Network and Telecommunications. How about you?</p><p><strong>Rudi:</strong> Same here! What made you choose this major?</p><p><strong>Dewi:</strong> I've always loved working with computers and networks. I want to become a network engineer. What about you?</p><p><strong>Rudi:</strong> I'm interested in cyber security. I think protecting networks is really important nowadays.</p><p><strong>Dewi:</strong> That's cool! Have you learned any specific tools yet?</p><p><strong>Rudi:</strong> Yes, I've been practicing with Wireshark to analyze network traffic. You?</p><p><strong>Dewi:</strong> I'm focusing on Cisco Packet Tracer for network simulation. Maybe we can study together sometime!</p><p><strong>Rudi:</strong> That would be great!</p></div>","question":"What tool is Dewi learning?","options":["Adobe Photoshop","Microsoft Office","Cisco Packet Tracer","AutoCAD","Python IDE"],"correct":2},{"id":16,"type":"dialogue","passageGroup":4,"passage":"<h3>Dialogue 2</h3><div class=\"dialogue\"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma'am! My name is Budi Santoso. I'm interested in wireless networks. I can configure basic Wi-Fi settings and I've installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That's excellent, Budi! What's your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I'm Siti Nurhaliza. My strength is in fiber optic technology. I've attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>","question":"What is Budi's area of interest?","options":["Fiber optic networks","Wireless networks","Network security","Server administration","Database management"],"correct":1},{"id":17,"type":"dialogue","passageGroup":4,"passage":"<h3>Dialogue 2</h3><div class=\"dialogue\"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma'am! My name is Budi Santoso. I'm interested in wireless networks. I can configure basic Wi-Fi settings and I've installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That's excellent, Budi! What's your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I'm Siti Nurhaliza. My strength is in fiber optic technology. I've attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>","question":"What has Budi done in his neighborhood?","options":["Installed security cameras","Set up computer labs","Installed Wi-Fi access points","Repaired computers","Taught computer classes"],"correct":2},{"id":18,"type":"dialogue","passageGroup":4,"passage":"<h3>Dialogue 2</h3><div class=\"dialogue\"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma'am! My name is Budi Santoso. I'm interested in wireless networks. I can configure basic Wi-Fi settings and I've installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That's excellent, Budi! What's your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I'm Siti Nurhaliza. My strength is in fiber optic technology. I've attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>","question":"What does Budi want to become?","options":["A teacher","A programmer","A wireless network consultant","A web developer","A database administrator"],"correct":2},{"id":19,"type":"dialogue","passageGroup":4,"passage":"<h3>Dialogue 2</h3><div class=\"dialogue\"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma'am! My name is Budi Santoso. I'm interested in wireless networks. I can configure basic Wi-Fi settings and I've installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That's excellent, Budi! What's your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I'm Siti Nurhaliza. My strength is in fiber optic technology. I've attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>","question":"What is Siti's strength?","options":["Programming","Graphic design","Fiber optic technology","Web development","Hardware repair"],"correct":2},{"id":20,"type":"dialogue","passageGroup":4,"passage":"<h3>Dialogue 2</h3><div class=\"dialogue\"><p><strong>Teacher:</strong> Good morning, class! Today, I want you to introduce your tech profiles to each other.</p><p><strong>Budi:</strong> Good morning, Ma'am! My name is Budi Santoso. I'm interested in wireless networks. I can configure basic Wi-Fi settings and I've installed several Wi-Fi access points at home and in my neighborhood.</p><p><strong>Teacher:</strong> That's excellent, Budi! What's your goal?</p><p><strong>Budi:</strong> I want to specialize in wireless network design and become a wireless network consultant.</p><p><strong>Teacher:</strong> Very good! How about you, Siti?</p><p><strong>Siti:</strong> Good morning! I'm Siti Nurhaliza. My strength is in fiber optic technology. I've attended a workshop on fiber optic splicing and I practice regularly at our school lab.</p><p><strong>Teacher:</strong> Impressive! Where do you see yourself in five years?</p><p><strong>Siti:</strong> I hope to work for a telecommunications company, installing and maintaining fiber optic networks across Indonesia.</p><p><strong>Teacher:</strong> Wonderful goals, everyone!</p></div>","question":"Where does Siti want to work?","options":["In a bank","In a school","In a software company","In a telecommunications company","In a government office"],"correct":3},{"id":21,"type":"dialogue","passageGroup":5,"passage":"<h3>Dialogue 3 - Job Interview</h3><div class=\"dialogue\"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I'm proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I've also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>","question":"Which brands of network devices can the candidate work with?","options":["Only Cisco","Only MikroTik","Cisco, MikroTik, and TP-Link","Only TP-Link","Dell and HP"],"correct":2},{"id":22,"type":"dialogue","passageGroup":5,"passage":"<h3>Dialogue 3 - Job Interview</h3><div class=\"dialogue\"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I'm proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I've also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>","question":"Which of the following is NOT mentioned as a troubleshooting tool used by the candidate?","options":["ping","traceroute","ipconfig","Wireshark","All are mentioned"],"correct":3},{"id":23,"type":"dialogue","passageGroup":5,"passage":"<h3>Dialogue 3 - Job Interview</h3><div class=\"dialogue\"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I'm proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I've also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>","question":"What network security concepts does the candidate understand?","options":["Only firewalls","Only VLANs","Firewalls, VLANs, and MAC filtering","Only MAC filtering","None of the above"],"correct":2},{"id":24,"type":"dialogue","passageGroup":5,"passage":"<h3>Dialogue 3 - Job Interview</h3><div class=\"dialogue\"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I'm proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I've also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>","question":"How many users were in the network project during the candidate's internship?","options":["10 users","15 users","20 users","25 users","30 users"],"correct":2},{"id":25,"type":"dialogue","passageGroup":5,"passage":"<h3>Dialogue 3 - Job Interview</h3><div class=\"dialogue\"><p><strong>Interviewer:</strong> Tell me about your technical skills.</p><p><strong>Candidate:</strong> Well, I'm proficient in setting up and configuring network devices. I can work with routers, switches, and access points from various brands like Cisco, MikroTik, and TP-Link.</p><p><strong>Interviewer:</strong> Do you have experience with network troubleshooting?</p><p><strong>Candidate:</strong> Yes, I do. I can diagnose common network problems such as connectivity issues, slow network speeds, and IP conflicts. I use tools like ping, traceroute, and ipconfig for basic troubleshooting.</p><p><strong>Interviewer:</strong> What about network security?</p><p><strong>Candidate:</strong> I understand basic security concepts like firewalls, VLANs, and MAC filtering. I've also configured basic firewall rules on routers.</p><p><strong>Interviewer:</strong> Have you worked on any projects?</p><p><strong>Candidate:</strong> Yes, I designed and implemented a small office network for 20 users during my internship. It included internet connectivity, file sharing, and network printer setup.</p><p><strong>Interviewer:</strong> That sounds impressive! What are your career aspirations?</p><p><strong>Candidate:</strong> I want to become a certified network professional and eventually lead network infrastructure projects for large organizations.</p></div>","question":"What is the candidate's career aspiration?","options":["To become a teacher","To become a certified network professional and lead infrastructure projects","To become a programmer","To become a graphic designer","To work in marketing"],"correct":1}];
+
+        // Security variables
+        let _0x5d2c = '';
+        let _0x6e3d = '';
+        let _0x7f4e = [];
+        let _0x8g5f = 0;
+        let _0x9h6g = [];
+        let _0xai7h = null;
+        let _0xbj8i = _0x2f1a._0xb2 * 60;
+        let _0xck9j = [];
+        let _0xdla0 = false;
+        let _0xemb1 = null;
+        let _0xfnc2 = 0;
+
+        // ====================================
+        // ADVANCED SECURITY MEASURES
+        // ====================================
+
+        // 1. Disable Right Click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 2. Disable F12, Ctrl+Shift+I, Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.keyCode === 123 || // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+                (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+                (e.ctrlKey && e.shiftKey && e.keyCode === 67) // Ctrl+Shift+C
+            ) {
+                e.preventDefault();
+                _0xfnc2++;
+                if (_0xfnc2 >= 3) {
+                    showSecurityWarning();
+                    _0xck9j.push({
+                        type: 'DevTools attempt',
+                        time: new Date().toLocaleTimeString('id-ID')
+                    });
+                }
+                return false;
+            }
+        });
+
+        // 3. Detect DevTools Opening
+        let _0xdevtools = false;
+        const _0xdetect = setInterval(function() {
+            const threshold = 160;
+            if (window.outerWidth - window.innerWidth > threshold || 
+                window.outerHeight - window.innerHeight > threshold) {
+                if (!_0xdevtools && _0xdla0) {
+                    _0xdevtools = true;
+                    showSecurityWarning();
+                    _0xck9j.push({
+                        type: 'DevTools detected',
+                        time: new Date().toLocaleTimeString('id-ID')
+                    });
+                    
+                    // Auto submit after 3 violations
+                    if (_0xck9j.length >= 5) {
+                        alert('⚠️ Terlalu banyak pelanggaran! Ujian akan dikumpulkan.');
+                        submitExam(true);
+                    }
+                }
+            } else {
+                _0xdevtools = false;
+            }
+        }, 1000);
+
+        // 4. Prevent Console Access
+        (function() {
+            try {
+                const devtools = /./;
+                devtools.toString = function() {
+                    if (_0xdla0) {
+                        showSecurityWarning();
+                        _0xck9j.push({
+                            type: 'Console access',
+                            time: new Date().toLocaleTimeString('id-ID')
+                        });
+                    }
+                    return 'devtools';
+                };
+                console.log('%c', devtools);
+            } catch(e) {}
+        })();
+
+        // 5. Clear console periodically
+        setInterval(function() {
+            if (_0xdla0) {
+                console.clear();
+                console.log('%c🚫 PERINGATAN!', 'color: red; font-size: 24px; font-weight: bold;');
+                console.log('%cMenggunakan console adalah PELANGGARAN!', 'color: red; font-size: 16px;');
+                console.log('%cSemua aktivitas direkam dan dilaporkan.', 'color: red; font-size: 16px;');
+            }
+        }, 2000);
+
+        // 6. Debugger trap
+        setInterval(function() {
+            if (_0xdla0) {
+                debugger;
+            }
+        }, 100);
+
+        // 7. Tab visibility tracking
+        document.addEventListener('visibilitychange', function() {
+            if (_0xdla0 && document.hidden) {
+                _0xck9j.push({
+                    type: 'Tab switch',
+                    time: new Date().toLocaleTimeString('id-ID')
+                });
+            }
+        });
+
+        window.addEventListener('blur', function() {
+            if (_0xdla0) {
+                _0xck9j.push({
+                    type: 'Window blur',
+                    time: new Date().toLocaleTimeString('id-ID')
+                });
+            }
+        });
+
+        // 8. Prevent copy-paste
+        document.addEventListener('copy', e => {
+            if (_0xdla0) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('cut', e => {
+            if (_0xdla0) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // ====================================
         // UTILITY FUNCTIONS
-        // ============================================================
-        function showElement(id) {
+        // ====================================
+        function _0x1show(id) {
             const el = document.getElementById(id);
             if (el) {
                 el.classList.remove('hidden');
@@ -682,7 +1046,7 @@
             }
         }
 
-        function hideElement(id) {
+        function _0x2hide(id) {
             const el = document.getElementById(id);
             if (el) {
                 el.classList.add('hidden');
@@ -690,7 +1054,7 @@
             }
         }
 
-        function shuffleArray(array) {
+        function _0x3shuffle(array) {
             let shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -699,17 +1063,23 @@
             return shuffled;
         }
 
-        // ============================================================
-        // GOOGLE SHEETS INTEGRATION
-        // ============================================================
-        async function sendToGoogleSheets(data) {
+        function showSecurityWarning() {
+            document.getElementById('securityWarning').classList.add('active');
+        }
+
+        function closeSecurityWarning() {
+            document.getElementById('securityWarning').classList.remove('active');
+        }
+
+        // ====================================
+        // GOOGLE SHEETS
+        // ====================================
+        async function _0x4send(data) {
             const statusEl = document.getElementById('submitStatus');
             
-            // Check if URL is configured
-            if (!CONFIG.GOOGLE_SCRIPT_URL || CONFIG.GOOGLE_SCRIPT_URL === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            if (!_0x2f1a._0xc3 || _0x2f1a._0xc3.includes('PASTE_YOUR')) {
                 statusEl.className = 'alert alert-warning';
-                statusEl.innerHTML = '<span>⚠️</span> <div>Google Sheets belum dikonfigurasi. Hubungi administrator untuk setup.</div>';
-                console.warn('Google Script URL belum di-set. Lihat PANDUAN_SETUP.md');
+                statusEl.innerHTML = '<span>⚠️</span> <div>Google Sheets belum dikonfigurasi. Hubungi administrator.</div>';
                 return false;
             }
 
@@ -717,35 +1087,30 @@
             statusEl.innerHTML = '<span>📤</span> <div>Mengirim hasil ke server...</div>';
 
             try {
-                const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+                await fetch(_0x2f1a._0xc3, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
-                // no-cors mode always returns opaque response, so we assume success
                 statusEl.className = 'alert alert-success-custom';
                 statusEl.innerHTML = '<span>✅</span> <div><strong>Hasil berhasil dikirim ke Google Sheets!</strong></div>';
-                console.log('✅ Data sent to Google Sheets');
                 return true;
-
             } catch (error) {
-                console.error('❌ Error sending to Google Sheets:', error);
                 statusEl.className = 'alert alert-danger';
-                statusEl.innerHTML = '<span>❌</span> <div><strong>Gagal mengirim ke Google Sheets.</strong><br>Error: ' + error.message + '<br>Hasil tetap ditampilkan di layar.</div>';
+                statusEl.innerHTML = '<span>❌</span> <div><strong>Gagal mengirim.</strong><br>' + error.message + '</div>';
                 return false;
             }
         }
 
-        // ============================================================
+        // ====================================
         // LOGIN
-        // ============================================================
-        function handleLogin(e) {
+        // ====================================
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
+            const studentClass = document.getElementById('studentClass').value;
             const password = document.getElementById('password').value;
 
             if (!username) {
@@ -753,82 +1118,89 @@
                 return;
             }
 
-            if (password !== CONFIG.PASSWORD) {
+            if (!studentClass) {
+                showLoginError('Silakan pilih kelas!');
+                return;
+            }
+
+            if (password !== _0x2f1a._0xa1) {
                 showLoginError('Password salah!');
                 return;
             }
 
-            studentName = username;
-            hideElement('loginScreen');
-            showElement('instructionsScreen');
-        }
+            _0x5d2c = username;
+            _0x6e3d = studentClass;
+            _0x2hide('loginScreen');
+            _0x1show('instructionsScreen');
+        });
 
         function showLoginError(message) {
             document.getElementById('loginError').textContent = message;
-            showElement('loginAlert');
-            setTimeout(() => hideElement('loginAlert'), 5000);
+            _0x1show('loginAlert');
+            setTimeout(() => _0x2hide('loginAlert'), 5000);
         }
 
-        // ============================================================
+        // ====================================
         // START EXAM
-        // ============================================================
+        // ====================================
         function startExam() {
-            examQuestions = shuffleArray([...EXAM_QUESTIONS]);
-            studentAnswers = new Array(examQuestions.length).fill(null);
+            _0x7f4e = _0x3shuffle([..._0x3e4b]);
+            _0x9h6g = new Array(_0x7f4e.length).fill(null);
             
-            hideElement('instructionsScreen');
-            showElement('examScreen');
+            _0x2hide('instructionsScreen');
+            _0x1show('examScreen');
             
-            document.getElementById('studentNameDisplay').textContent = studentName;
-            document.getElementById('totalQuestions').textContent = examQuestions.length;
+            document.getElementById('studentNameDisplay').textContent = _0x5d2c;
+            document.getElementById('studentClassDisplay').textContent = '📚 ' + _0x6e3d;
+            document.getElementById('totalQuestions').textContent = _0x7f4e.length;
             
-            examStarted = true;
-            examStartTime = new Date();
-            startTimer();
-            displayQuestion(0);
+            _0xdla0 = true;
+            _0xemb1 = new Date();
+            _0x5timer();
+            _0x6display(0);
         }
+        _0x4a8f[0] = startExam;
 
-        // ============================================================
+        // ====================================
         // TIMER
-        // ============================================================
-        function startTimer() {
-            updateTimerDisplay();
-            timerInterval = setInterval(function() {
-                timeRemaining--;
-                updateTimerDisplay();
-                if (timeRemaining <= 0) {
-                    clearInterval(timerInterval);
+        // ====================================
+        function _0x5timer() {
+            _0x7update();
+            _0xai7h = setInterval(function() {
+                _0xbj8i--;
+                _0x7update();
+                if (_0xbj8i <= 0) {
+                    clearInterval(_0xai7h);
                     alert('⏰ Waktu habis!');
                     submitExam(true);
                 }
             }, 1000);
         }
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
+        function _0x7update() {
+            const minutes = Math.floor(_0xbj8i / 60);
+            const seconds = _0xbj8i % 60;
             document.getElementById('timer').textContent = 
                 `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
             
             const timerEl = document.getElementById('timer');
-            if (timeRemaining <= 300) {
-                timerEl.style.color = '#E74C3C';
-            } else if (timeRemaining <= 600) {
-                timerEl.style.color = '#F39C12';
+            if (_0xbj8i <= 300) {
+                timerEl.style.color = '#fa709a';
+            } else if (_0xbj8i <= 600) {
+                timerEl.style.color = '#feca57';
             }
         }
 
-        // ============================================================
+        // ====================================
         // DISPLAY QUESTION
-        // ============================================================
-        function displayQuestion(index) {
-            currentQuestionIndex = index;
-            const q = examQuestions[index];
+        // ====================================
+        function _0x6display(index) {
+            _0x8g5f = index;
+            const q = _0x7f4e[index];
             
             document.getElementById('currentQuestion').textContent = index + 1;
             
             let html = '';
-            
             if (q.passage) {
                 html += `<div class="passage">${q.passage}</div>`;
             }
@@ -836,9 +1208,9 @@
             html += `<div class="question-text"><strong>Question ${index + 1}:</strong> ${q.question}</div><div class="options">`;
             
             q.options.forEach((opt, i) => {
-                const isSelected = studentAnswers[index] === i;
+                const isSelected = _0x9h6g[index] === i;
                 const letter = String.fromCharCode(65 + i);
-                html += `<div class="option ${isSelected ? 'selected' : ''}" onclick="selectOption(${i})">
+                html += `<div class="option ${isSelected ? 'selected' : ''}" onclick="_0x8select(${i})">
                     <input type="radio" name="answer" value="${i}" ${isSelected ? 'checked' : ''}>
                     <span class="option-label"><strong>${letter}.</strong> ${opt}</span>
                 </div>`;
@@ -849,37 +1221,40 @@
             
             document.getElementById('prevBtn').disabled = (index === 0);
             
-            if (index === examQuestions.length - 1) {
-                hideElement('nextBtn');
-                showElement('finishBtn');
+            if (index === _0x7f4e.length - 1) {
+                _0x2hide('nextBtn');
+                _0x1show('finishBtn');
             } else {
-                showElement('nextBtn');
-                hideElement('finishBtn');
+                _0x1show('nextBtn');
+                _0x2hide('finishBtn');
             }
         }
 
-        function selectOption(optionIndex) {
-            studentAnswers[currentQuestionIndex] = optionIndex;
-            displayQuestion(currentQuestionIndex);
+        function _0x8select(optionIndex) {
+            _0x9h6g[_0x8g5f] = optionIndex;
+            _0x6display(_0x8g5f);
         }
+        window._0x8select = _0x8select;
 
-        // ============================================================
+        // ====================================
         // NAVIGATION
-        // ============================================================
+        // ====================================
         function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                displayQuestion(currentQuestionIndex - 1);
+            if (_0x8g5f > 0) {
+                _0x6display(_0x8g5f - 1);
             }
         }
+        _0x4a8f[1] = prevQuestion;
 
         function nextQuestion() {
-            if (currentQuestionIndex < examQuestions.length - 1) {
-                displayQuestion(currentQuestionIndex + 1);
+            if (_0x8g5f < _0x7f4e.length - 1) {
+                _0x6display(_0x8g5f + 1);
             }
         }
+        _0x4a8f[2] = nextQuestion;
 
         function handleFinishExam() {
-            const unanswered = studentAnswers.filter(a => a === null).length;
+            const unanswered = _0x9h6g.filter(a => a === null).length;
             let msg = unanswered > 0 ? 
                 `⚠️ Anda memiliki ${unanswered} soal yang belum dijawab. Yakin ingin mengumpulkan?` : 
                 '✅ Yakin ingin mengumpulkan ujian sekarang?';
@@ -887,41 +1262,39 @@
             if (!confirm(msg)) return;
             submitExam(false);
         }
+        _0x4a8f[3] = handleFinishExam;
 
-        // ============================================================
-        // SUBMIT EXAM + SEND TO GOOGLE SHEETS
-        // ============================================================
+        // ====================================
+        // SUBMIT EXAM
+        // ====================================
         function submitExam(forcedEnd) {
-            examStarted = false;
-            clearInterval(timerInterval);
+            _0xdla0 = false;
+            clearInterval(_0xai7h);
             
-            hideElement('examScreen');
-            showElement('loadingSpinner');
+            _0x2hide('examScreen');
+            _0x1show('loadingSpinner');
             
             let correctAnswers = 0;
-            examQuestions.forEach((q, i) => {
-                if (q.correct === studentAnswers[i]) correctAnswers++;
+            _0x7f4e.forEach((q, i) => {
+                if (q.correct === _0x9h6g[i]) correctAnswers++;
             });
             
-            const finalScore = Math.round((correctAnswers / examQuestions.length) * 100);
-            
-            // Calculate time taken
+            const finalScore = Math.round((correctAnswers / _0x7f4e.length) * 100);
             const examEndTime = new Date();
-            const timeTakenMs = examEndTime - examStartTime;
+            const timeTakenMs = examEndTime - _0xemb1;
             const timeTakenMinutes = (timeTakenMs / 60000).toFixed(1);
 
-            // Prepare cheating info
             let cheatingInfo = 'Tidak ada';
-            if (cheatingAttempts.length > 0) {
-                cheatingInfo = cheatingAttempts.length + ' pelanggaran: ' + 
-                    cheatingAttempts.map(c => c.type).join(', ');
+            if (_0xck9j.length > 0) {
+                cheatingInfo = _0xck9j.length + ' pelanggaran: ' + 
+                    _0xck9j.map(c => c.type).join(', ');
             }
 
-            // Data to send to Google Sheets
             const sheetData = {
-                nama: studentName,
+                nama: _0x5d2c,
+                kelas: _0x6e3d,
                 benar: correctAnswers,
-                total: examQuestions.length,
+                total: _0x7f4e.length,
                 nilai: finalScore,
                 waktuPengerjaan: timeTakenMinutes,
                 pelanggaran: cheatingInfo,
@@ -929,25 +1302,24 @@
             };
 
             setTimeout(async () => {
-                hideElement('loadingSpinner');
+                _0x2hide('loadingSpinner');
                 displayResult({
                     score: finalScore, 
                     correct: correctAnswers, 
-                    total: examQuestions.length
+                    total: _0x7f4e.length
                 });
-                
-                // Send to Google Sheets
-                await sendToGoogleSheets(sheetData);
+                await _0x4send(sheetData);
             }, 1500);
         }
 
-        // ============================================================
+        // ====================================
         // RESULT DISPLAY
-        // ============================================================
+        // ====================================
         function displayResult(result) {
-            showElement('resultScreen');
+            _0x1show('resultScreen');
             
-            document.getElementById('resultName').textContent = studentName;
+            document.getElementById('resultName').textContent = _0x5d2c;
+            document.getElementById('resultClass').textContent = _0x6e3d;
             document.getElementById('resultCorrect').textContent = `${result.correct} soal`;
             document.getElementById('resultTotal').textContent = `${result.total} soal`;
             document.getElementById('resultValue').textContent = result.score;
@@ -964,43 +1336,20 @@
                 iconEl.textContent = '😔';
             }
 
-            // Show cheating alerts if any
-            if (cheatingAttempts.length > 0) {
-                showElement('cheatingAlert');
+            if (_0xck9j.length > 0) {
+                _0x1show('cheatingAlert');
                 document.getElementById('cheatingDetails').textContent = 
-                    `Terdeteksi ${cheatingAttempts.length} aktivitas mencurigakan.`;
+                    `Terdeteksi ${_0xck9j.length} aktivitas mencurigakan.`;
             }
         }
 
-        // ============================================================
-        // ANTI-CHEATING (Tab Switch Detection)
-        // ============================================================
-        document.addEventListener('visibilitychange', function() {
-            if (examStarted && document.hidden) {
-                cheatingAttempts.push({
-                    type: 'Tab switch',
-                    time: new Date().toLocaleTimeString('id-ID')
-                });
-                console.warn('⚠️ Tab switch detected!');
-            }
-        });
-
-        window.addEventListener('blur', function() {
-            if (examStarted) {
-                cheatingAttempts.push({
-                    type: 'Window blur',
-                    time: new Date().toLocaleTimeString('id-ID')
-                });
-                console.warn('⚠️ Window blur detected!');
-            }
-        });
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        console.log('✅ System Ready!');
-        console.log('📚 Total Questions:', EXAM_QUESTIONS.length);
-        console.log('🔗 Google Sheets Integration: Active');
+        // Anti-tampering
+        Object.freeze(_0x2f1a);
+        Object.freeze(_0x3e4b);
+        
+        console.log('%c🔒 SISTEM KEAMANAN AKTIF', 'color: #667eea; font-size: 20px; font-weight: bold;');
+        console.log('%c✅ Anti-Cheat Enabled', 'color: green; font-size: 14px;');
+        console.log('%c🚫 DevTools Detection Active', 'color: red; font-size: 14px;');
     </script>
 </body>
 </html>
